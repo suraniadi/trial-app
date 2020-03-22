@@ -49,10 +49,10 @@ const SearchButton = styled.div`
     `
 
 
-const SearchBar = ({text}) => {
+const SearchBar = () => {
     return (
         <Container>
-            <PHoldText placeholder = "Search images..." value = {text}/>
+            <PHoldText placeholder = "Search images..."/>
             <SearchButton>Go</SearchButton>
         </Container>
     )
