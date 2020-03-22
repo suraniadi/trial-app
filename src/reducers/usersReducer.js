@@ -1,17 +1,18 @@
 // import React from 'react';
 
-const reducer = (state = {images : []}, action) => {
+const reducer = (state = {images : [], name : ""}, action) => {
+    console.log(action.type);
     switch(action.type) {
-        case "Users" : 
+        case "imageName":
+            return {
+                ...state,
+                name : action.payload
+            }
+        case "Images" : 
             return  {
-                images: [
-                {
-                    id: '1',
-                },
-                {
-                    id: '2'
-                }
-            ]}
+                ...state,
+                images: action.payload
+            }
         default :
          return "NO";
     }
