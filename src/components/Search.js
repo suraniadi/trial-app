@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import SearchBar from './SearchBar';
-import User from './User';
+import Image from './Image';
 import {useDispatch, useSelector} from 'react-redux';
 import axios from 'axios';
 
@@ -17,7 +17,7 @@ const Title = styled.div`
   font-size: 40px;
 `
 
-const Users = styled.div`
+const Images = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 30px;
@@ -26,21 +26,41 @@ const Users = styled.div`
 `
 
 const Search = () => {
+    //Adding a loading gif
     const search = useSelector(state => state);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // async function fetchData() {
-        //     // let res = await axios.get('http://localhost:1337/api.gravityaround.com/images');
-        //     // console.log(res.data);
-        // }
-        // fetchData();
+        async function fetchData() {
+            let res = await axios.get('https://api.gravityaround.com/images');
 
-        dispatch({
-            type: "Users"
-            // payload: res.data
-        });
+                 dispatch({
+                    type: "Images",
+                    payload: res.data
+                });
+        }
+        fetchData();
         }, [])
+
+    useEffect(() => {
+        async function updateData() {
+            if(search.name){
+
+                let res = await axios.get('https://api.gravityaround.com/images');
+
+                dispatch({
+                type: "Images",
+                payload: res.data.filter(image => {
+                    for(let i = 0; i < image.categories.length; ++i)
+                        if(image.categories[i].includes(search.name)) return true;
+
+                    return false;
+                })}
+                );
+            }
+        }
+        updateData();
+    },[search.name])
 
     return (
     <div>
@@ -50,14 +70,11 @@ const Search = () => {
         </Title>
         </Header>
         <SearchBar/>
-        <Users>
-            {function() {
-                console.log(search.images);
-            }()}
-            {search.images ? search.images.map((user) => 
-                <User key = {user.id}/>
-            ) : <div>There are no users!</div>}
-        </Users>
+        <Images>
+            {search.images ? search.images.map((image) => 
+                <Image key = {image.id} image={image}/>
+            ) : <div>There are no images!</div>}
+        </Images>
     </div>
     )
 }

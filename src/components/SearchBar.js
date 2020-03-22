@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useSelector, useDispatch} from 'react-redux';
 
 const Container = styled.div`
     width : 90%;
@@ -50,9 +51,25 @@ const SearchButton = styled.div`
 
 
 const SearchBar = () => {
+    const search = useSelector(state => state);
+    const dispatch = useDispatch();
+
+    const handleChange = (e) => {
+        dispatch({
+            type: e.target.name,
+            payload: e.target.value
+        })
+        // dispatch(
+        //     {
+        //         type: 'Images',
+        //         payload : 
+        //     }
+        // )
+    }
+
     return (
         <Container>
-            <PHoldText placeholder = "Search images..."/>
+            <PHoldText placeholder = "Search images..." name = "imageName" onChange={handleChange}/>
             <SearchButton>Go</SearchButton>
         </Container>
     )
